@@ -1,0 +1,41 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start SmartBite Backend (FastAPI)",
+      "type": "shell",
+      "command": "python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "smartbite"
+      }
+    },
+    {
+      "label": "Start SmartBite Frontend (React Vite)",
+      "type": "shell",
+      "command": "cmd /c \"cd frontend && npm.cmd run dev\"",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "smartbite"
+      }
+    },
+    {
+      "label": "Run SmartBite Full-Stack (Backend + Frontend)",
+      "dependsOn": [
+        "Start SmartBite Backend (FastAPI)",
+        "Start SmartBite Frontend (React Vite)"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    }
+  ]
+}
