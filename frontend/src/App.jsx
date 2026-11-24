@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 
-// Pages
-import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Inventory from './pages/Inventory';
 import WasteRecording from './pages/WasteRecording';
@@ -14,19 +13,21 @@ import Surplus from './pages/Surplus';
 import Suggestions from './pages/Suggestions';
 import Reports from './pages/Reports';
 
-const ProtectedLayout = () => {
-  const { isAuthenticated } = useAuth();
+const MainLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
 
   return (
     <div className="app-layout">
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
+
       <div className="main-content-wrapper">
-        <Navbar onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+        <Navbar
+          onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+        />
+
         <main style={{ flex: 1, paddingBottom: '40px' }}>
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
@@ -44,26 +45,12 @@ const ProtectedLayout = () => {
   );
 };
 
-const AppRoutes = () => {
-  const { isAuthenticated } = useAuth();
-
-  return (
-    <Routes>
-      <Route
-        path="/login"
-        element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login />}
-      />
-      <Route path="/*" element={<ProtectedLayout />} />
-    </Routes>
-  );
-};
-
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
+      <HashRouter>
+        <MainLayout />
+      </HashRouter>
     </AuthProvider>
   );
 }
